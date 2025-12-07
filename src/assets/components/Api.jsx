@@ -1,113 +1,126 @@
-import React, { useState } from 'react';
-import './Api.css';
+import React, { useState, useEffect, useRef } from "react";
+import "./Api.css";
+import { sanitizeHtml, stripHtml } from "../../utils/htmlFilter";
 
 function Api() {
   const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const scrollRef = useRef(null);
 
-  const apis = {
-    joke: async () => {
-      const res = await fetch('https://v2.jokeapi.dev/joke/Any');
-      const data = await res.json();
-      return data.type === 'single' ? data.joke : `${data.setup} ... ${data.delivery}`;
-    },
-    quote: async () => {
-      const res = await fetch('https://api.quotable.io/random');
-      const data = await res.json();
-      return `"${data.content}" — ${data.author}`;
-    },
-    advice: async () => {
-      const res = await fetch('https://api.adviceslip.com/advice');
-      const data = await res.json();
-      return data.slip.advice;
-    },
-    trivia: async () => {
-      const res = await fetch('https://opentdb.com/api.php?amount=1&type=multiple');
-      const data = await res.json();
-      const q = data.results[0].question;
-      const a = data.results[0].correct_answer;
-      return `Trivia: ${q} 🧠 Answer: ${a}`;
-    },
-    fact: async () => {
-      const res = await fetch('https://uselessfacts.jsph.pl/random.json?language=en');
-      const data = await res.json();
-      return `🤓 Fun fact: ${data.text}`;
-    },
-    number: async () => {
-      const res = await fetch('http://numbersapi.com/random/trivia?json');
-      const data = await res.json();
-      return `🔢 Number fact: ${data.text}`;
-    },
-    weather: async (city) => {
+  const CHATBOT_ENDPOINT = "https://jonn8n.safehub-lcup.uk/webhook/chatbot";
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages, isOpen]);
+
+  const extractReply = (p) => {
+    if (p === null || p === undefined) return "";
+    if (typeof p === "string") {
+      const t = p.trim();
+      const looksLikeJson = t.startsWith("{") || t.startsWith("[");
+      if (looksLikeJson) {
+        try {
+          const maybe = JSON.parse(t);
+          return extractReply(maybe);
+        } catch {
+          return p;
+        }
+      }
+      return p;
+    }
+    if (Array.isArray(p)) {
+      if (p.length === 0) return "";
+      return extractReply(p[0]);
+    }
+    if (typeof p === "object") {
+      const keys = [
+        "reply",
+        "message",
+        "text",
+        "output",
+        "data",
+        "result",
+        "response",
+      ];
+      for (const k of keys) {
+        if (p[k] !== undefined && p[k] !== null) {
+          return extractReply(p[k]);
+        }
+      }
+      if (p.choices && Array.isArray(p.choices) && p.choices[0]) {
+        const c = p.choices[0];
+        return extractReply(c.text ?? c.message ?? c);
+      }
+      if (p.messages && Array.isArray(p.messages) && p.messages[0]) {
+        return extractReply(p.messages[0].text ?? p.messages[0]);
+      }
+      for (const k of Object.keys(p)) {
+        if (typeof p[k] === "string" && p[k].trim()) return p[k];
+      }
       try {
-        const res = await fetch(`https://wttr.in/${encodeURIComponent(city)}?format=3`);
-        const text = await res.text();
-        return `🌦️ ${text}`;
+        return JSON.stringify(p);
       } catch {
-        return "I couldn't get the weather right now.";
+        return String(p);
       }
-    },
-    word: async (word) => {
-      const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
-      const data = await res.json();
-      if (Array.isArray(data)) {
-        const meaning = data[0].meanings[0].definitions[0].definition;
-        return `📘 Definition of "${word}": ${meaning}`;
-      }
-      return "I couldn’t find that word 😅";
-    },
-    wiki: async (query) => {
-      try {
-        const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`);
+    }
+    return String(p);
+  };
+
+  const stripCodeFences = (s) => {
+    let t = String(s ?? "").trim();
+    const blockFence = /^```(?:[a-zA-Z0-9_-]+)?\s*([\s\S]*?)\s*```$/;
+    const m = t.match(blockFence);
+    if (m) t = m[1];
+    t = t.replace(/```/g, "");
+    return t.trim();
+  };
+
+  const htmlToPlainText = (html) => {
+    if (!html) return "";
+    const noFences = stripCodeFences(html);
+
+    return stripHtml(noFences);
+  };
+
+  const callChatbot = async (userText) => {
+    try {
+      const res = await fetch(CHATBOT_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: userText }),
+      });
+
+      const contentType = res.headers.get("content-type") || "";
+      if (contentType.includes("application/json")) {
         const data = await res.json();
-        return data.extract || "Sorry, I couldn't find that on Wikipedia.";
-      } catch {
-        return "Oops! Something went wrong fetching info.";
+        return data;
       }
+      const text = await res.text();
+      return text || "No response from chatbot.";
+    } catch (err) {
+      return "Sorry, I could not reach the chatbot API.";
     }
   };
 
   const sendMessage = async () => {
     if (!input.trim()) return;
 
-    const userMsg = { sender: 'user', text: input };
-    setMessages(prev => [...prev, userMsg]);
-    setInput('');
+    const userMsg = { sender: "user", text: input };
+    setMessages((prev) => [...prev, userMsg]);
+    setInput("");
     setLoading(true);
 
-    const msg = input.toLowerCase();
-    let reply = '';
-
-    if (msg.includes('hello') || msg.includes('hi')) {
-      reply = "Hey there! 👋 How’s your day going?";
-    } else if (msg.includes('how are you')) {
-      reply = "I'm feeling pink and positive! 🌸 How about you?";
-    } else if (msg.includes('joke')) {
-      reply = await apis.joke();
-    } else if (msg.includes('quote')) {
-      reply = await apis.quote();
-    } else if (msg.includes('advice')) {
-      reply = await apis.advice();
-    } else if (msg.includes('fact')) {
-      reply = await apis.fact();
-    } else if (msg.includes('trivia')) {
-      reply = await apis.trivia();
-    } else if (msg.includes('number')) {
-      reply = await apis.number();
-    } else if (msg.includes('weather')) {
-      const city = msg.split('weather in ')[1] || 'Manila';
-      reply = await apis.weather(city);
-    } else if (msg.startsWith('define ')) {
-      const word = msg.replace('define ', '').trim();
-      reply = await apis.word(word);
-    } else {
-      reply = await apis.wiki(input);
-    }
-
-    const botMsg = { sender: 'bot', text: reply };
-    setMessages(prev => [...prev, botMsg]);
+    const raw = await callChatbot(input);
+    const extracted = extractReply(raw) || "No reply content";
+    const finalText = htmlToPlainText(extracted);
+    const botMsg = { sender: "bot", text: finalText };
+    setMessages((prev) => [...prev, botMsg]);
     setLoading(false);
   };
 
@@ -122,10 +135,10 @@ function Api() {
       {isOpen && (
         <div className="api-container">
           <div className="chat-header" onClick={() => setIsOpen(false)}>
-            Chat Assistant  <span style={{ cursor: 'pointer' }}>✕</span>
+            Chat Assistant <span style={{ cursor: "pointer" }}>✕</span>
           </div>
 
-          <div className="chat-window">
+          <div className="chat-window" ref={scrollRef}>
             {messages.map((msg, idx) => (
               <div key={idx} className={`chat-message ${msg.sender}`}>
                 {msg.text}
@@ -139,8 +152,8 @@ function Api() {
               type="text"
               value={input}
               placeholder="Ask me anything... (e.g. weather in Cebu, define love)"
-              onChange={e => setInput(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && sendMessage()}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && sendMessage()}
             />
             <button onClick={sendMessage}>Send</button>
           </div>

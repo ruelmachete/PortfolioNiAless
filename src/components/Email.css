@@ -1,0 +1,101 @@
+/* src/components/Email.css */
+
+.certificates-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  margin-top: 30px;
+  margin-bottom: 50px;
+  position: relative; 
+  /* TRANSPARENT */
+  background: transparent !important;
+  z-index: 2;
+}
+
+.certificates-container {
+  overflow: hidden;
+  max-width: 960px;
+  padding: 20px 0;
+}
+
+.certificates-track {
+  display: flex;
+  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); 
+  gap: 20px;
+}
+
+.certificate-card {
+  flex: 0 0 calc(33.33% - 13.33px);
+  background: rgba(255, 255, 255, 0.6); /* Glass */
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 15px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  cursor: pointer;
+  transition: transform 0.4s ease; 
+  padding: 15px;
+}
+
+.certificate-card img {
+  width: 100%;
+  height: 180px; 
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.certificate-card:hover {
+  transform: translateY(-10px) scale(1.05); 
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.hover-preview {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  border: 2px solid #ad1457; 
+  border-radius: 15px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+  width: 800px; 
+  max-width: 90vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.hover-preview img {
+  width: 100%;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+.carousel-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.carousel-btn {
+  background-color: #ad1457; 
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+@media (max-width: 600px) {
+  .certificate-card { flex: 0 0 100%; }
+}

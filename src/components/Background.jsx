@@ -13,7 +13,8 @@ export default function LiquidEther({
   BFECC = true,
   resolution = 0.5,
   isBounce = false,
-  colors = ['#000000ff', '#FF9FFC', '#B19EEF'],
+  // Updated colors to match your Pink theme closer
+  colors = ['#ff80ab', '#f8bbd0', '#ad1457'], 
   style = {},
   className = '',
   autoDemo = true,
@@ -65,7 +66,8 @@ export default function LiquidEther({
     }
 
     const paletteTex = makePaletteTexture(colors);
-    const bgVec4 = new THREE.Vector4(0, 0, 0, 0); // always transparent
+    // Background vector is transparent so it layers over CSS background
+    const bgVec4 = new THREE.Vector4(0, 0, 0, 0); 
 
     class CommonClass {
       constructor() {
@@ -89,7 +91,7 @@ export default function LiquidEther({
         this.resize();
         this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         this.renderer.autoClear = false;
-        this.renderer.setClearColor(new THREE.Color(0x000000), 0);
+        this.renderer.setClearColor(new THREE.Color(0x000000), 0); // Completely transparent clear
         this.renderer.setPixelRatio(this.pixelRatio);
         this.renderer.setSize(this.width, this.height);
         this.renderer.domElement.style.width = '100%';
@@ -248,7 +250,7 @@ export default function LiquidEther({
         this.lastTime = performance.now();
         this.activationTime = 0;
         this.margin = 0.2;
-        this._tmpDir = new THREE.Vector2(); // reuse temp vector to avoid per-frame alloc
+        this._tmpDir = new THREE.Vector2(); 
         this.pickNewTarget();
       }
       pickNewTarget() {

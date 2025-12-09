@@ -1,0 +1,107 @@
+/* src/admin/Login.css */
+
+/* 1. Container must cover the whole screen and block the transparent body */
+.login-container {
+  position: fixed; /* Fixes it to the viewport */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999; /* Ensures it sits on top of everything */
+  
+  /* Apply a solid gradient so we don't see the portfolio background */
+  background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+  overflow: hidden;
+}
+
+/* Optional: Decorative circle behind the form */
+.login-container::before {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: #ad1457;
+  border-radius: 50%;
+  top: -150px;
+  right: -150px;
+  opacity: 0.1;
+  z-index: 0;
+}
+
+/* 2. The Login Card */
+.login-form {
+  background: rgba(255, 255, 255, 0.9); /* More opaque */
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  padding: 50px 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(173, 20, 87, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  width: 100%;
+  max-width: 400px;
+  z-index: 10;
+  text-align: center;
+}
+
+.login-header h2 {
+  color: #ad1457;
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+}
+
+.login-header p {
+  color: #880e4f;
+  margin-bottom: 30px;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid rgba(173, 20, 87, 0.1);
+  border-radius: 10px;
+  font-size: 1rem;
+  outline: none;
+  background: white;
+  box-sizing: border-box; /* Fixes padding issues */
+}
+
+.input-group input:focus {
+  border-color: #ad1457;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 15px;
+  background: #ad1457;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.login-btn:hover {
+  background: #880e4f;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(173, 20, 87, 0.3);
+}
+
+.login-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}

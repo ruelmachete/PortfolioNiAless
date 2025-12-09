@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Satisfy&display=swap');
 
-
 .header {
   width: 100%;
   background: transparent; 
@@ -11,71 +10,48 @@
   left: 0;
   z-index: 1000;
   transition: background 0.4s ease, box-shadow 0.4s ease;
+  padding: 10px 0;
 }
-
 
 .header.scrolled {
-  background: linear-gradient(180deg, #fff0f5, #fdeef3, #f8bbd0); 
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.85); /* Glass effect on scroll */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(173, 20, 87, 0.1);
 }
-
 
 .header-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 5px 10px;
+  padding: 0 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-
 .logo span {
-  font-size: 40px;
+  font-size: 32px;
   font-weight: bold;
   font-family: 'Satisfy', cursive;
-  font-style: italic;
   color: #ad1457;
-  padding: 5px 10px;
-  border-radius: 5px;
 }
-
 
 .nav-links {
   display: flex;
   gap: 24px;
 }
 
-
-.nav-links a,
-.nav-links button {
-  font-size: 20px;
-  font-weight: bold;
-  font-family: 'Playfair Display', serif;
+.nav-links a {
+  font-size: 18px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
   color: #880e4f;
   text-decoration: none;
-  background: none;
-  border: none;
-  cursor: pointer;
   transition: all 0.3s ease;
-  font-family: Arial, sans-serif;
+  position: relative;
 }
 
-
-.nav-links a:focus,
-.nav-links button:focus {
-  outline: none;
-  border: none;
-  border-radius: 0;
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
-  text-decoration-color: #ad1457;
-}
-
-
-.nav-links a:hover,
-.nav-links button:hover {
+.nav-links a:hover {
   color: #ad1457;
-  transform: translateY(-3px);
-  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
 }

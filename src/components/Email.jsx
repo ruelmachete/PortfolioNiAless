@@ -1,27 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Email.css";
+import { supabase } from "../supabaseClient";
 
 const Certificates = () => {
-  const images = [
-    "/logos/MOS.jpg",
-    "/logos/CERT1.png",
-    "/logos/CERT2.png",
-    "/logos/CERT3.png",
-    "/logos/DL1.png",
-    "/logos/DL2.png",
-  ];
-
+  const [images, setImages] = useState([]);
   const visibleCount = 3;
   const [startIndex, setStartIndex] = useState(0);
   const [hoveredImage, setHoveredImage] = useState(null);
 
+  useEffect(() => {
+    const fetchCerts = async () => {
+      const { data } = await supabase.from('certificates').select('image_url').order('created_at', {ascending: false});
+      if(data) {
+        // Map Supabase object to simple array of strings if that's what your CSS expects, 
+        // or update CSS to handle objects. Here I extract just the URL.
+        setImages(data.map(item => item.image_url));
+      }
+    };
+    fetchCerts();
+  }, []);
+
   const nextSlide = () => {
-    setStartIndex((prev) => (prev + 1) % images.length);
+    if (images.length > 0) setStartIndex((prev) => (prev + 1) % images.length);
   };
 
   const prevSlide = () => {
-    setStartIndex((prev) => (prev - 1 + images.length) % images.length);
+    if (images.length > 0) setStartIndex((prev) => (prev - 1 + images.length) % images.length);
   };
+
+  if (images.length === 0) return <div>Loading Certificates...</div>;
 
   return (
     <div className="certificates-wrapper">
@@ -52,12 +59,8 @@ const Certificates = () => {
       </div>
 
       <div className="carousel-buttons">
-        <button className="carousel-btn" onClick={prevSlide}>
-          &#10094; Prev
-        </button>
-        <button className="carousel-btn" onClick={nextSlide}>
-          Next &#10095;
-        </button>
+        <button className="carousel-btn" onClick={prevSlide}>&#10094; Prev</button>
+        <button className="carousel-btn" onClick={nextSlide}>Next &#10095;</button>
       </div>
     </div>
   );

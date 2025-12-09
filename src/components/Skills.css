@@ -1,6 +1,11 @@
+/* src/components/Skills.css */
+
 .skills-section {
   padding: 2rem 1rem;
-  background: transparent; 
+  /* TRANSPARENT to see live background */
+  background: transparent !important;
+  position: relative;
+  z-index: 2;
 }
 
 .skills-title {
@@ -10,76 +15,50 @@
   font-size: 2.2rem;
   font-weight: 600;
   margin-bottom: 2rem;
-  letter-spacing: 0.5px;
 }
 
 .skills {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 25px;
-  padding: 10px;
+  gap: 30px;
+  padding: 10px 10%;
   margin-top: 40px;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
-.skills.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-
+/* Glassmorphism Cards */
 .skills .card {
-  background: rgba(255, 240, 245, 0.75); 
-  border: 1.5px solid rgba(248, 187, 208, 0.5);
+  background: rgba(255, 255, 255, 0.4); /* Transparent White */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: 18px;
   padding: 25px 20px;
   text-align: center;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 5px 15px rgba(173, 20, 87, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(173, 20, 87, 0.1);
   transition: all 0.3s ease;
 }
 
 .skills .card:hover {
   transform: translateY(-8px) scale(1.03);
-  background: rgba(255, 240, 245, 0.9);
+  background: rgba(255, 255, 255, 0.7);
   box-shadow: 0 8px 20px rgba(173, 20, 87, 0.2);
 }
-
 
 .skills .card img {
   width: 65px;
   height: 65px;
   object-fit: contain;
   margin-bottom: 12px;
-  transition: transform 0.3s ease;
 }
-
-.skills .card:hover img {
-  transform: scale(1.15);
-}
-
 
 .skills .card h3 {
   font-size: 1rem;
   color: #ad1457;
   margin-bottom: 6px;
-  font-family: 'Poppins', sans-serif;
   font-weight: 600;
 }
 
-
 .skills .card p {
   font-size: 0.9rem;
-  color: #555;
-  line-height: 1.4;
-  font-family: 'Poppins', sans-serif;
-}
-
-
-@media (min-width: 900px) {
-  .skills {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
-  }
+  color: #333;
 }

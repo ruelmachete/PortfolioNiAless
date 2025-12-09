@@ -1,103 +1,59 @@
-import { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import './App.css';
-import Header from './assets/components/Header.jsx';
-import About from './assets/components/About.jsx';
-import Aboutme from './assets/components/Aboutme.jsx';   // ✅ Correct import (matches your file)
-import Skills from './assets/components/Skills.jsx';
-import Footer from './assets/components/Footer.jsx';
-import Projects from './assets/components/Projects.jsx';
-import Api from './assets/components/Api.jsx'; 
-import Contact from './assets/components/Contact.jsx';
-import Certificates from './assets/components/Email.jsx';
-import Background from './assets/components/Background.jsx'; // ✅ add .jsx for consistency
-import Quotes from './assets/components/Quotes.jsx'; 
+
+// Import Components
+import Background from './components/Background';
+import Header from './components/Header';
+import About from './components/About';
+import Aboutme from './components/Aboutme';
+import Skills from './components/Skills';
+import Projects from './components/Projects';
+import Certificates from './components/Email'; 
+import Contact from './components/Contact';
+import Footer from './components/Footer';
+import Api from './components/Api'; 
 
 function App() {
   const [showAboutMe, setShowAboutMe] = useState(false);
-  const [isHiding, setIsHiding] = useState(false);
-
-  const aboutRef = useRef(null);
-  const aboutMeRef = useRef(null);
-
-  const handleShowAboutMe = () => {
-    setShowAboutMe(true);
-    setTimeout(() => {
-      aboutMeRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
-  };
-
-  const handleHideAboutMe = () => {
-    if (!aboutMeRef.current) return;
-    aboutRef.current?.scrollIntoView({ behavior: "smooth" });
-    setIsHiding(true);
-    setTimeout(() => {
-      setShowAboutMe(false);
-      setIsHiding(false);
-    }, 400);
-  };
 
   return (
-    <div className="App" style={{ position: 'relative', overflow: 'hidden' }}>
-      <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1 }}>
-        <Background
-          colors={["#FFE4EC", "#FFD1DC", "#FFB6C1", "#9e2258ff"]}
-          mouseForce={20}
-          cursorSize={100}
-          isViscous={false}
-          viscous={30}
-          iterationsViscous={32}
-          iterationsPoisson={32}
-          resolution={0.5}
-          isBounce={false}
-          autoDemo={true}
-          autoSpeed={0.5}
-          autoIntensity={2.2}
-          takeoverDuration={0.25}
-          autoResumeDelay={3000}
-          autoRampDuration={0.6}
-        />
-      </div>
+    <div className="App">
+      {/* 1. Background Animation (Must be at top to render behind) */}
+      <Background />
+      
+      {/* 2. Chatbot */}
+      <Api />
 
+      {/* 3. Navigation */}
       <Header />
-      <main className="main-content">
-        <section id="about" className="section" ref={aboutRef}>
-          <About onShowMore={handleShowAboutMe} />
+      
+      {/* 4. Popup Overlay */}
+      {showAboutMe && (
+        <div className="aboutme-overlay">
+          <Aboutme onBack={() => setShowAboutMe(false)} />
+        </div>
+      )}
+
+      {/* 5. Main Content Area */}
+      <main>
+        <section id="about">
+          <About onShowMore={() => setShowAboutMe(true)} />
         </section>
 
-        {showAboutMe && (
-          <section
-            id="aboutme"
-            className={`section aboutme-dropdown ${isHiding ? "hide" : "show"}`}
-            ref={aboutMeRef}
-          >
-            <Aboutme onBack={handleHideAboutMe} />   {/* ✅ matches your file name */}
-          </section>
-        )}
-
-        <section id="quotes" className="section">
-          <Quotes />
-        </section>
-
-        <section id="projects" className="section">
-          <Projects />
-        </section>
-
-        <section id="skills" className="section">
+        <section id="skills">
           <Skills />
         </section>
 
-        <section id="contact" className="section">
-          <h2 className="section-header">Contact</h2>
-          <Contact />  
+        <section id="projects">
+          <Projects />
         </section>
 
-        <section id="certificates" className="section">
-          <h2 className="section-header">Message</h2>
+        <section id="certificates">
           <Certificates />
         </section>
 
-        <section id="funtext" className="section">
-          <Api />
+        <section id="contact">
+          <Contact />
         </section>
       </main>
 

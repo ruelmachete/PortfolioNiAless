@@ -7,7 +7,12 @@ const About = ({ onShowMore }) => {
 
   useEffect(() => {
     const fetchAbout = async () => {
-      const { data } = await supabase.from('about_info').select('*').limit(1).single();
+      const { data, error } = await supabase
+        .from('about_info')
+        .select('*')
+        .limit(1)
+        .single();
+      
       if (data) setData(data);
     };
     fetchAbout();
@@ -17,8 +22,8 @@ const About = ({ onShowMore }) => {
     greeting: "Hey, there",
     name: "I AM ALESSANDRA",
     title: "IT Student • Aspiring Developer",
-    description: "As an IT student, I love exploring technology and design...",
-    image_url: "/logos/alessnobg (2).png"
+    description: "Loading...",
+    image_url: null // Will trigger fallback
   };
 
   return (
@@ -31,13 +36,13 @@ const About = ({ onShowMore }) => {
         <h3>{display.title}</h3>
         <p>{display.description}</p>
 
-        {/* IMPORTANT: This triggers the function passed from App.jsx */}
         <button onClick={onShowMore} className="cta-btn">About Me</button>
       </div>
 
       <div className="about-image">
+        {/* FIX: Same error handling as Aboutme.jsx */}
         <img 
-          src={display.image_url || "/logos/alessnobg (2).png"} 
+          src={display.image_url} 
           alt="Alessandra" 
           onError={(e) => e.target.src = '/logos/alessnobg (2).png'}
         />

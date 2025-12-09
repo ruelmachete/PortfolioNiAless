@@ -3,7 +3,16 @@ import { supabase } from '../supabaseClient';
 import toast from 'react-hot-toast';
 
 const ManageAbout = () => {
-  const [form, setForm] = useState({ greeting: '', name: '', title: '', description: '' });
+  const [form, setForm] = useState({ 
+    greeting: '', 
+    name: '', 
+    title: '', 
+    description: '',
+    birthday: '',
+    nationality: '',
+    religion: ''
+  });
+  
   const [imageFile, setImageFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [id, setId] = useState(null);
@@ -54,6 +63,7 @@ const ManageAbout = () => {
         fetchAbout();
         resolve();
       } catch (err) {
+        console.error(err);
         reject(err);
       } finally {
         setLoading(false);
@@ -62,40 +72,65 @@ const ManageAbout = () => {
 
     toast.promise(promise, {
       loading: 'Saving profile...',
-      success: 'Profile updated!',
-      error: 'Failed to update',
+      success: 'Profile updated successfully!',
+      error: (err) => `Error: ${err.message}`,
     });
   };
 
   return (
     <div>
       <h1 className="section-header">Manage About Me</h1>
-      <p className="section-subtitle">Edit your introduction and biography.</p>
+      <p className="section-subtitle">Edit your introduction, biography, and profile picture.</p>
 
       <form className="admin-form" onSubmit={handleSubmit}>
+        
+        <h3 style={{color:'var(--primary)', marginBottom:'15px'}}>Main Info</h3>
         <div className="form-group">
-          <input value={form.greeting} placeholder=" " onChange={e => setForm({...form, greeting: e.target.value})} />
           <label>Greeting</label>
+          <input value={form.greeting || ''} onChange={e => setForm({...form, greeting: e.target.value})} />
         </div>
+
         <div className="form-group">
-          <input value={form.name} placeholder=" " onChange={e => setForm({...form, name: e.target.value})} />
           <label>Name</label>
+          <input value={form.name || ''} onChange={e => setForm({...form, name: e.target.value})} />
         </div>
+
         <div className="form-group">
-          <input value={form.title} placeholder=" " onChange={e => setForm({...form, title: e.target.value})} />
           <label>Job Title</label>
+          <input value={form.title || ''} onChange={e => setForm({...form, title: e.target.value})} />
+        </div>
+
+        <div className="form-group">
+          <label>Full Bio / Description</label>
+          <textarea rows="5" value={form.description || ''} onChange={e => setForm({...form, description: e.target.value})} />
+        </div>
+
+        <h3 style={{color:'var(--primary)', marginTop:'30px', marginBottom:'15px'}}>Personal Details (CV)</h3>
+        <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'20px'}}>
+            <div className="form-group">
+              <label>Birthday</label>
+              <input type="date" value={form.birthday || ''} onChange={e => setForm({...form, birthday: e.target.value})} />
+            </div>
+            <div className="form-group">
+              <label>Nationality</label>
+              <input value={form.nationality || ''} onChange={e => setForm({...form, nationality: e.target.value})} />
+            </div>
         </div>
         <div className="form-group">
-          <textarea rows="5" value={form.description} placeholder=" " onChange={e => setForm({...form, description: e.target.value})} />
-          <label>Bio</label>
+          <label>Religion</label>
+          <input value={form.religion || ''} onChange={e => setForm({...form, religion: e.target.value})} />
         </div>
+
         <div className="form-group">
-          <label style={{position:'relative', top:0, left:0, marginBottom:10}}>Profile Image</label>
-          <div style={{display:'flex', gap:'15px', alignItems:'center'}}>
+          <label>Profile Image</label>
+          <div style={{display:'flex', gap:'20px', alignItems:'center', marginTop:'5px'}}>
             <input type="file" onChange={e => setImageFile(e.target.files[0])} />
-            {currentImage && <img src={currentImage} alt="Current" style={{width:'60px', height:'60px', borderRadius:'10px', objectFit:'cover'}} />}
+            <div style={{width:'80px', height:'80px', borderRadius:'10px', overflow:'hidden', border:'1px solid #ddd', background:'#f9f9f9'}}>
+              {imageFile ? <img src={URL.createObjectURL(imageFile)} style={{width:'100%', height:'100%', objectFit:'cover'}} /> : currentImage ? <img src={currentImage} style={{width:'100%', height:'100%', objectFit:'cover'}} /> : null}
+            </div>
           </div>
         </div>
+
         <button type="submit" className="save-btn" disabled={loading}>Save Changes</button>
       </form>
     </div>

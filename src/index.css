@@ -1,4 +1,5 @@
 /* src/index.css */
+
 :root {
   font-family: 'Outfit', sans-serif;
   line-height: 1.5;
@@ -11,20 +12,20 @@ html, body {
   padding: 0;
   width: 100%;
   min-height: 100vh;
-  /* CRITICAL: Must be transparent for z-index:-1 background to show */
-  background-color: transparent !important;
-  background: transparent !important;
+  /* CLEAN STATIC BACKGROUND */
+  background: linear-gradient(135deg, #fff0f5 0%, #faeef3 50%, #ffffff 100%);
+  background-attachment: fixed; /* Ensures background stays in place while scrolling */
   overflow-x: hidden;
+  color: #333;
 }
 
 #root {
   min-height: 100vh;
   width: 100%;
-  background-color: transparent !important;
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar { width: 10px; }
-::-webkit-scrollbar-track { background: rgba(255,255,255,0.1); }
+::-webkit-scrollbar-track { background: #f8f9fa; }
 ::-webkit-scrollbar-thumb { background: #ad1457; border-radius: 5px; }
 ::-webkit-scrollbar-thumb:hover { background: #880e4f; }

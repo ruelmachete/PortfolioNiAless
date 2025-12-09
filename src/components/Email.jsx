@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom"; 
 import "./Email.css";
 import { supabase } from "../supabaseClient";
 
@@ -6,19 +7,30 @@ const Certificates = () => {
   const [images, setImages] = useState([]);
   const visibleCount = 3;
   const [startIndex, setStartIndex] = useState(0);
-  const [hoveredImage, setHoveredImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     const fetchCerts = async () => {
-      const { data } = await supabase.from('certificates').select('image_url').order('created_at', {ascending: false});
+      const { data } = await supabase
+        .from('certificates')
+        .select('image_url')
+        .order('created_at', {ascending: false});
+      
       if(data) {
-        // Map Supabase object to simple array of strings if that's what your CSS expects, 
-        // or update CSS to handle objects. Here I extract just the URL.
         setImages(data.map(item => item.image_url));
       }
     };
     fetchCerts();
   }, []);
+
+  useEffect(() => {
+    if (selectedImage) {
+      document.body.style.overflow = 'hidden'; 
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    return () => { document.body.style.overflow = 'auto'; };
+  }, [selectedImage]);
 
   const nextSlide = () => {
     if (images.length > 0) setStartIndex((prev) => (prev + 1) % images.length);
@@ -28,16 +40,28 @@ const Certificates = () => {
     if (images.length > 0) setStartIndex((prev) => (prev - 1 + images.length) % images.length);
   };
 
-  if (images.length === 0) return <div>Loading Certificates...</div>;
+  if (images.length === 0) return <div style={{textAlign: 'center', padding: '20px'}}>Loading Certificates...</div>;
 
   return (
     <div className="certificates-wrapper">
-      {hoveredImage && (
-        <div className="hover-preview">
-          <img src={hoveredImage} alt="Preview" />
-        </div>
+      
+      {/* ADDED TITLE HERE */}
+      <h2 className="certificates-title">My Certificates</h2>
+
+      {/* PORTAL MODAL */}
+      {selectedImage && createPortal(
+        <div className="certificate-modal" onClick={() => setSelectedImage(null)}>
+          <button className="close-modal-btn" onClick={() => setSelectedImage(null)}>
+            ✕
+          </button>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <img src={selectedImage} alt="Enlarged Certificate" />
+          </div>
+        </div>,
+        document.body
       )}
 
+      {/* CAROUSEL TRACK */}
       <div className="certificates-container">
         <div
           className="certificates-track"
@@ -49,10 +73,14 @@ const Certificates = () => {
             <div
               className="certificate-card"
               key={idx}
-              onMouseEnter={() => setHoveredImage(img)}
-              onMouseLeave={() => setHoveredImage(null)}
+              onClick={() => setSelectedImage(img)}
+              title="Click to view full screen"
             >
-              <img src={img} alt={`certificate ${idx}`} />
+              <img 
+                src={img} 
+                alt={`certificate ${idx}`} 
+                onError={(e) => e.target.src='https://via.placeholder.com/300?text=No+Image'}
+              />
             </div>
           ))}
         </div>

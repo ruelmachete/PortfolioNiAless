@@ -7,8 +7,7 @@
   padding: 100px 10%;
   width: 80%;
   min-height: 90vh;
-  /* TRANSPARENT to see live background */
-  background: transparent !important; 
+  background: transparent !important; /* Force Transparency */
   position: relative;
   z-index: 2;
 }
@@ -33,7 +32,7 @@
   font-weight: 800;
   line-height: 1.2;
   margin: 20px 0;
-  color: #333; 
+  color: #333;
 }
 
 .about-text .highlight {

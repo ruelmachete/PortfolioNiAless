@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import './App.css';
 
 // Import Components
-import Background from './components/Background';
 import Header from './components/Header';
 import About from './components/About';
 import Aboutme from './components/Aboutme';
+import Quotes from './components/Quotes'; // IMPORT ADDED
 import Skills from './components/Skills';
 import Projects from './components/Projects';
 import Certificates from './components/Email'; 
@@ -18,26 +18,28 @@ function App() {
 
   return (
     <div className="App">
-      {/* 1. Background Animation (Must be at top to render behind) */}
-      <Background />
-      
-      {/* 2. Chatbot */}
+      {/* 1. Chatbot */}
       <Api />
 
-      {/* 3. Navigation */}
+      {/* 2. Header/Nav */}
       <Header />
       
-      {/* 4. Popup Overlay */}
+      {/* 3. About Me Overlay (Popup) */}
       {showAboutMe && (
         <div className="aboutme-overlay">
           <Aboutme onBack={() => setShowAboutMe(false)} />
         </div>
       )}
 
-      {/* 5. Main Content Area */}
+      {/* 4. Main Content Sections */}
       <main>
         <section id="about">
           <About onShowMore={() => setShowAboutMe(true)} />
+        </section>
+
+        {/* Quotes Section Added Here */}
+        <section id="quotes">
+          <Quotes />
         </section>
 
         <section id="skills">

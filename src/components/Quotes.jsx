@@ -1,49 +1,39 @@
 import React, { useEffect, useState } from "react";
+import "./Quotes.css";
 
 const Quotes = () => {
-  const [joke, setJoke] = useState("");
+  const [quote, setQuote] = useState({ text: "Loading inspiration...", author: "" });
 
   useEffect(() => {
-    const fetchJoke = async () => {
+    const fetchQuote = async () => {
       try {
-        const response = await fetch("https://v2.jokeapi.dev/joke/Programming?type=single");
+        // Fetching from a stable, free Quotes API
+        const response = await fetch("https://dummyjson.com/quotes/random");
         const data = await response.json();
-
-        if (data && data.joke) {
-          setJoke(data.joke);
+        
+        if (data && data.quote) {
+          setQuote({ text: data.quote, author: data.author });
         } else {
-          setJoke("No joke found 😅");
+          throw new Error("No data");
         }
       } catch (error) {
-        console.error("Error fetching joke:", error);
-        setJoke("Error loading joke 😅");
+        // Fallback quote if API fails
+        setQuote({ 
+          text: "Code is like humor. When you have to explain it, it’s bad.", 
+          author: "Cory House" 
+        });
       }
     };
 
-    fetchJoke();
+    fetchQuote();
   }, []);
 
   return (
-    <div
-      style={{
-        margin: "30px auto",
-        width: "80%",
-        height: "60px",
-        backgroundColor: "rgba(255, 192, 203, 0.25)", 
-        borderRadius: "12px",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        textAlign: "center",
-        padding: "10px 20px",
-        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-        color: "#ad1457",
-        fontFamily: "'Poppins', sans-serif",
-        fontSize: "0.95rem",
-        fontWeight: 500,
-      }}
-    >
-      {joke ? `"${joke}"` : "Loading joke... 💭"}
+    <div className="quote-wrapper">
+      <div className="quote-box">
+        <p className="quote-text">“{quote.text}”</p>
+        <span className="quote-author">— {quote.author}</span>
+      </div>
     </div>
   );
 };

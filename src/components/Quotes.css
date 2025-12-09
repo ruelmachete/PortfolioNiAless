@@ -1,46 +1,61 @@
-.quote-box {
-  width: 80%;
-  height: 80px; 
-  margin: 40px auto;
-  border-radius: 15px;
-  background: rgba(255, 255, 255, 0.25); 
-  backdrop-filter: blur(6px);
-  border: 1px solid rgba(255, 182, 193, 0.4); 
+/* src/components/Quotes.css */
+
+.quote-wrapper {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  animation: fadeIn 1s ease;
+  align-items: center;
+  padding: 40px 10%;
+  width: 100%;
+  background: transparent !important;
+  position: relative;
+  z-index: 2;
+  box-sizing: border-box;
+}
+
+.quote-box {
+  background: rgba(255, 255, 255, 0.5); /* Glass effect */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 16px;
+  padding: 30px 40px;
+  max-width: 800px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(173, 20, 87, 0.1);
   transition: transform 0.3s ease;
 }
 
 .quote-box:hover {
-  transform: scale(1.03);
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 12px 40px rgba(173, 20, 87, 0.15);
 }
 
 .quote-text {
-  color: #ad1457; 
-  font-size: 1rem;
-  text-align: center;
-  font-weight: 500;
-  padding: 0 10px;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-style: italic;
+  color: #ad1457;
+  margin-bottom: 15px;
+  line-height: 1.4;
 }
 
 .quote-author {
-  color: #880e4f;
-  font-size: 0.9rem;
-  margin-top: 5px;
-  font-style: italic;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #555;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .quote-box {
+    padding: 20px;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  .quote-text {
+    font-size: 1.2rem;
   }
 }

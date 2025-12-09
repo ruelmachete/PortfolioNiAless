@@ -1,0 +1,73 @@
+/* src/components/Message.css */
+
+.message-container {
+  max-width: 500px;
+  width: 90%;
+  margin: 0 auto;
+  padding: 40px 30px;
+  /* Pink Gradient Glass Effect */
+  background: linear-gradient(135deg, rgba(255, 240, 245, 0.8), rgba(255, 255, 255, 0.9));
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(173, 20, 87, 0.1);
+  font-family: 'Outfit', sans-serif;
+  transition: transform 0.3s;
+}
+
+.message-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(173, 20, 87, 0.15);
+}
+
+.message-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.message-container input,
+.message-container textarea {
+  padding: 14px 18px;
+  font-size: 1rem;
+  border: 2px solid rgba(173, 20, 87, 0.2); 
+  border-radius: 12px;
+  outline: none;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.8);
+  width: 100%;
+  box-sizing: border-box;
+  font-family: 'Outfit', sans-serif;
+}
+
+.message-container input:focus,
+.message-container textarea:focus {
+  border-color: #ad1457;
+  box-shadow: 0 0 10px rgba(173, 20, 87, 0.1);
+  background: #ffffff;
+}
+
+.message-container button {
+  padding: 14px;
+  font-size: 1rem;
+  font-weight: bold;
+  background-color: #ad1457;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(173, 20, 87, 0.3);
+}
+
+.message-container button:hover {
+  background-color: #880e4f;
+  transform: translateY(-2px);
+}
+
+.status-msg {
+  margin-top: 15px;
+  font-weight: 600;
+  color: #ad1457;
+  text-align: center;
+}

@@ -2,8 +2,7 @@
 
 .projects-section {
   padding: 2rem 10%;
-  /* TRANSPARENT to see live background */
-  background: transparent !important;
+  background: transparent !important; /* Force Transparency */
   position: relative;
   z-index: 2;
 }
@@ -24,11 +23,10 @@
   padding: 2rem 0;
 }
 
-/* Glass Cards */
+/* Glass Card */
 .projects .card {
   background: rgba(255, 255, 255, 0.5); /* Transparent White */
   backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.7);
   border-radius: 15px;
   box-shadow: 0 8px 32px 0 rgba(173, 20, 87, 0.15);
